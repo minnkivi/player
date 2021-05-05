@@ -36,6 +36,10 @@ class TestPlay(MycroftSkill):
 	def handle_next_intent(self, message):
 		self.play_next()
 
+	@intent_file_handler('update.intent')
+	def handlle_update_intent(self, message):
+		self.update_library()
+
 	def open_player(self):
 		if not is_playing():
 			self.start_player()
@@ -43,9 +47,12 @@ class TestPlay(MycroftSkill):
 	def start_player(self):
 		os.system("screen -d -m -S cmus cmus &")
 		os.system('cmus-remote -C "view 2"')
-		#os.system('cmus-remote -C clear')
-		#os.system('cmus-remote -C add -l ~/music/*')
 		os.system('cmus-remote -p')
+
+	def update_library(self):
+		os.system('cmus-remote -C clear')
+		os.system('cmus-remote -C "add ~/music"')
+		self.speak_dialog("update")
 
 	def pause_player(self):
 		self.speak_dialog("pause")
